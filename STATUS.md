@@ -1,21 +1,23 @@
-## Good first issues / status:
+## Good first issues / status
+
+Here the issues and todos are listed with each file. (#) indicates expected difficulty
 
 ### Utils
 `log.py`:
 
 (1): small bug in `level` function 
 (1): add typing support / warning ignores if working on ide / pylance
-(2): needs convenient way of effectively keeping track of file names for log messages from different/multiple files.
+(1): needs convenient way of effectively keeping track of file names for log messages from different/multiple files.
 
 `format.py`:
 
-(1): provide implementation for printf
+~~(1): provide implementation for printf~~
 
 ### Builtins:
 
 `ti_draw.py`: 
 
-(0): needs testing
+(0): needs more thorough testing
 
 `ti_system.py`:
 
