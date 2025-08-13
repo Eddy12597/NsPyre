@@ -10,6 +10,10 @@ If you have a product key for the calculator, you can simply paste the codes int
 
 If you do not, like me, have or want to buy one, you can test programs on your computer via the replicated and adapted builtins libraries. For actual production, you have to manually type / change code by hand, since no FOSS `.tns` file manipulator exists. Also, [Ndless](https://github.com/ndless-nspire/Ndless) dropped support for Version 6+.
 
+Type hints are, like in python, not checked in TI Nspire. The `|` syntax for a union of types is not supported and results in syntax error. However, you can emulate unions of types by `/` (TI Nspire python does not check for type validity, and for custom object types, you don't have to include quotes. In fact, that results in a syntax error). Type hints are not available for direct variable assignment (e.g. `a: dict[str,str] = {}`; you have to write comments for them.
+
+Some useful keyboard shortcuts. You can type underscores (`_`) on the calculator very quickly by Ctrl + space, and you can type colons (`:`) quickly by Ctrl + symbols (the key that has a blue `:=` on top). Ctrl + del deletes the entire line, no matter where the cursor is. Ctrl + H is find and replace. Move between pages by ctrl + arrow. Always remember to save your entire `.tns` file by `doc + 1 + 4`, not just saving the python file (`menu + 2 + 2`).
+
 ## Documentation
 
 ### Builtins
@@ -28,5 +32,5 @@ If you do not, like me, have or want to buy one, you can test programs on your c
 
 `femto.py`: stepwise command based text editor.
 
-`main.py`: starts the program, parses commands
+`terminal.py`: starts the program, parses commands
 

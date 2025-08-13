@@ -1,22 +1,48 @@
 ## Good first issues / status:
 
 ### Utils
-`log.py`: small bug in `level` function. needs convenient way of effectively keeping track of file names for log messages from different/multiple files. also needs more typing support / warning ignores
+`log.py`:
+
+(1): small bug in `level` function 
+(1): add typing support / warning ignores if working on ide / pylance
+(2): needs convenient way of effectively keeping track of file names for log messages from different/multiple files.
+
+`format.py`:
+
+(1): provide implementation for printf
 
 ### Builtins:
 
-`ti_draw.py`: good enough, but not buggy enough like the real ti nspire version
+`ti_draw.py`: 
 
-`ti_system.py`: good enough, may need typing support
+(0): needs testing
+
+`ti_system.py`:
+
+(0): needs testing
+(0): needs typing support
 
 ### Python-based virtual OS:
 
-`filesys.py`: good enough
+`filesys.py`:
 
-`fileio.py`: potential bug in `edit` and new line creation. spaghetti code needs fixing. current list <-> buffer manipulation is inefficient and may not work for large files.
+(1): dir function is recursive by default when called from main
 
-`cli.py`: needs support for line wrapping for long lines.
+`fileio.py`: 
 
-`femto.py`: bug in `edit` and new line creation. can't save file to persistent memory
+(1): potential bug in `edit` and new line creation. 
+(2): spaghetti code needs fixing.
+(3): current list <-> buffer manipulation is inefficient and may not work for large files.
 
-`main.py`: needs more integration with `fileio.py` for persistent folder/file storage
+`cli.py`:
+
+(2): needs support for line wrapping for long lines.
+
+`femto.py`: 
+
+(2): bug in `edit` and new line creation.
+(2): can't save file to persistent memory
+
+`terminal.py`: 
+
+(2): needs more integration with `fileio.py` for persistent folder/file storage
