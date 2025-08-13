@@ -2,7 +2,7 @@
 
 A collection of useless and fun Python programs in TI Nspire CX II calculators (version 6.0+ which is not compatible with Ndless)
 
-Currently, a lot of the programs (and those I haven't uploaded) are buggy, and PRs (and issues) are extremely welcome.
+Currently, a lot of the programs (and those I haven't uploaded) are buggy, and PRs (and issues) are extremely welcome. Status / good first issues can be found in STATUS.md
 
 ## Contribution / Development
 
