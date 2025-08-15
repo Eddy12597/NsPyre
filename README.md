@@ -71,7 +71,7 @@ Here the issues and todos are listed with each file. (#) indicates expected diff
 
 `filesys.py`:
 
-(1): dir function is recursive by default when called from main
+~~(1): dir function is recursive by default when called from main~~ (by [Eddy12597](https://github.com/Eddy12597))
 
 `fileio.py`: 
 
@@ -87,7 +87,7 @@ Here the issues and todos are listed with each file. (#) indicates expected diff
 
 `femto.py`: 
 
-(2): bug in `edit` and new line creation.
+(1): bug in `edit` function
 
 (2): can't save file to persistent memory
 
