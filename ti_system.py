@@ -1,9 +1,6 @@
 # ti_system_mock.py
 import time
 import sys
-import termios
-import tty
-import sys
 
 # Internal storage to simulate TI-Nspire's variable store
 _variable_store = {}

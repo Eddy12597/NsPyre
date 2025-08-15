@@ -131,12 +131,12 @@ def draw_line(x1, x2, y1, y2):
     _run_or_buffer(_draw_line_impl, x1, x2, y1, y2)
 
 
-def draw_rect(x1, x2, y1, y2):
-    _run_or_buffer(_draw_rect_impl, x1, x2, y1, y2, False)
+def draw_rect(x, y, width, height):
+    _run_or_buffer(_draw_rect_impl, x, x + width, y, y + height, False)
 
 
-def fill_rect(x1, x2, y1, y2):
-    _run_or_buffer(_draw_rect_impl, x1, x2, y1, y2, True)
+def fill_rect(x, y, width, height):
+    _run_or_buffer(_draw_rect_impl, x, x + width, y, y + height, True)
 
 
 def draw_circle(x, y, radius):
@@ -176,15 +176,16 @@ def clear():
     _screen.update()
 
 
-def clear_rect(x1, y1, x2, y2):
-    # Turtle can't "erase" a region — we just draw over it in white
+
+def clear_rect(x, y, width, height):
     global _color
     old_color = _color
     set_color(255, 255, 255)
-    fill_rect(x1, x2, y1, y2)
+    fill_rect(x, y, width, height)
     _color = old_color
     _apply_pen()
     _screen.update()
+
 
 
 def set_color(*args: Union[int, Tuple[int, int, int]]):

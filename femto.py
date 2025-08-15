@@ -54,7 +54,7 @@ class femto:
                 s.pgno += (1 if s.pgno * s.nolpp + s.curl < len(flist) - 1 else 0)
             elif cmd == "p": # previous page
                 s.pgno -= (1 if s.pgno * s.nolpp + s.curl > 0 else 0)
-            elif cmd == "a" # add a line
+            elif cmd == "a": # add a line
                 s.file.insert(s.pgno * s.nolpp + s.curl, "")
                 s.file.saved = False
             elif _can_int(cmd): # go to line number

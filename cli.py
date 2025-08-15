@@ -15,6 +15,9 @@ def clamp(_min, x, _max):
 
 class cli:
     def __init__(s, clisets: dict = None, guisets: dict = None): # includes cli and gui settings
+
+        # Needs refactoring (using dict.get)
+        # cli settings
         s.scrollup = 0 # cursor upward scroll
         s.cursorleft = 0 # position of cursor with relation to EOL
         s.root = fs.root # link file system to cli for easier integration with terminal.py
@@ -26,3 +29,123 @@ class cli:
         except: s.text_history = []
         try: s.cwd = clisets["cwd"] # current working directory
         except: s.cwd=s.root # s.cwd: folder
+
+        # gui settings
+        try: s.color = guisets["color"]
+        except: s.color = (250, 250, 250)
+        try: s.background_color = guisets["background_color"]
+        except: s.background_color = (40, 40, 45)
+        try: s.cursor = guisets["cursor"]
+        except: s.cursor = "|"
+        try: s.prompt_end_char = guisets["prompt_end_char"]
+        except: s.prompt_end_char = "$"
+        try: s.arrow_list = guisets["arrow_list"]
+        except: s.arrow_list = {
+            "up": "^", # this works in ti nspire
+            "down": "exp",
+            "left": "left", # left arrow
+            "right": "right",
+        }
+            
+        d.set_window(0, 318, 0, 18)
+        d.set_color(s.background_color)
+        d.fill_rect(0, 0, 318, 18)
+        d.set_color(s.color)
+    
+    def getPrefix(s):
+        return s.user_name + ":" + str(s.cwd) + s.prompt_end_char + " "
+    def setLastLine(s, text: str) -> None:
+        # lg.call("setLastLine", text)
+        s.text_history[-1] = text
+        # lg.end("setLastLine")
+    
+    def setCwd(s, newCwd: fs.folder): # the `cd` command
+        s.cwd = newCwd
+    def clearscreen(s):
+        d.set_color(s.background_color)
+        d.fill_rect(0, 0, 318, 18)
+        d.set_color(s.color)
+    def display(s, text: str = None):
+        if text is not None:
+            s.text_history.append(text)
+        if len(s.text_history) > 18:
+            s.clearscreen()
+            for i in range(1, 19):
+                d.draw_text(0, 18-i, str(s.text_history[-(18-i) - 1 - s.scrollup]))
+                # overflow-x
+                if len(s.text_history[-1]) > 50:
+                    s.display(s.text_history[-1][51:])
+            d.paint_buffer()
+        else:
+            s.clearscreen()
+            d.use_buffer()
+            for i in range(1, len(s.text_history) + 1):
+                d.draw_text(0, 18-i, s.text_history[i-1])
+            d.paint_buffer()
+    # future:
+    """
+    def blinkCursor(s, numsPerSec: int = 1.5, minlen=0):
+        # blinks the cursor at a given frequency.
+        # returns any key that is pressed (apart from del and the arrow keys)
+        # will be integrated into the getInput function
+    """
+
+    def getInput(s, prompt: str) -> str:
+        lg.call("getInput", prompt)
+        s.display(prompt)
+        result = ""
+        while True:
+            k = tis.get_key()
+            if k == "esc":
+                break
+            if k == "enter":
+                return result
+            if k != "":
+                if not (k.startswith("del")) and not (k in s.arrow_list.values()):
+                    s.setLastLine(
+                        # my implementation of substr in format.py, similar to the one in java
+                        substr(
+                            s.text_history[-1], 0, len(s.text_history[-1]) - s.cursorleft - 0 # kept here, try toggling if buggy
+                            ) + k + substr(
+                                s.text_history[-1],
+                                len(s.text_history[-1]) - s.cursorleft, len(s.text_history[-1])           
+                            )
+                    )
+                elif k.startswith("del"):
+                    # no idea how it actually worked
+                    if len(s.text_history[-1]) > len(prompt):
+                        s.text_history[-1] = substr(
+                            s.text_history[-1],
+                            0, len(s.text_history[-1]) - s.cursorleft - 1
+                        ) + substr(
+                            s.text_history[-1],
+                            len(s.text_history[-1]) - s.cursorleft, len(s.text_history[-1])
+                        )
+                elif k in s.arrow_list.values():
+                    if k == s.arrow_list["up"]:
+                        lg.info("up key")
+                        s.scrollup += 1 if s.scrollup < len(s.text_history) - 18 else 0
+                    elif k == s.arrow_list["down"]:
+                        lg.info("down key")
+                        s.scrollup -= 1 if s.scrollup > 0 else 0
+                    elif k == s.arrow_list["left"]:
+                        lg.info("left key")
+                        s.cursorleft += (1 if s.cursorleft < len(s.text_history[-1]) - len(prompt) else 0)
+                    elif k == s.arrow_list["right"]:
+                        lg.info("right key")
+                        s.cursorleft -= 1 if s.cursorleft > 0 else 0
+
+                # end of checking key type (normal, del, arrow)
+                s.display()
+            # end of checking whether key pressed is empty or not
+            result = s.text_history[-1][len(prompt):len(s.text_history[-1])]
+            t.sleep(0.01)
+        # end of while loop
+        lg.end(result)
+        return result
+    # windows `cls` and unix `clear`
+    def cls(s, prompt = ""):
+        s.text_history = []
+        s.clearscreen()
+        s.display(prompt)
+    

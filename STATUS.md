@@ -6,7 +6,9 @@ Here the issues and todos are listed with each file. (#) indicates expected diff
 `log.py`:
 
 (1): small bug in `level` function 
+
 (1): add typing support / warning ignores if working on ide / pylance
+
 (1): needs convenient way of effectively keeping track of file names for log messages from different/multiple files.
 
 `format.py`:
@@ -17,11 +19,12 @@ Here the issues and todos are listed with each file. (#) indicates expected diff
 
 `ti_draw.py`: 
 
-(0): needs more thorough testing
+(3): figure out a calculator-compatible way for a blocking input function (try running `_test_cli.py` and you'll see)
 
 `ti_system.py`:
 
 (0): needs testing
+
 (0): needs typing support
 
 ### Python-based virtual OS:
@@ -33,16 +36,19 @@ Here the issues and todos are listed with each file. (#) indicates expected diff
 `fileio.py`: 
 
 (1): potential bug in `edit` and new line creation. 
+
 (2): spaghetti code needs fixing.
+
 (3): current list <-> buffer manipulation is inefficient and may not work for large files.
 
 `cli.py`:
 
-(2): needs support for line wrapping for long lines.
+(1): needs testing for support for line wrapping for long lines.
 
 `femto.py`: 
 
 (2): bug in `edit` and new line creation.
+
 (2): can't save file to persistent memory
 
 `terminal.py`: 
