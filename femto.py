@@ -14,7 +14,7 @@ def _can_int(s: str):
         return False
 
 class femto:
-    def __init__(s, name: str):
+    def __init__(s, name: str = "temp"):
         s.cli = cli.cli() # renderer object
         s.file = fio.file(name, fio.ios_app | fio.ios_in | fio.ios_out) # persistent file storage
         s.name=name # file name
@@ -36,7 +36,7 @@ class femto:
                 s.cli.display(str(i+1)+"/"+str(s.pgno*s.nolpp+s.curl)+": "+flist[s.pgno+i])
             s.cli.display("===============")
             s.cli.display("Enter command: ")
-            cmd=s.cli.getInut(":")
+            cmd=s.cli.getInput(":")
             lg.info("cmd="+cmd)
             if cmd == "q": # quit
                 s.running=False
@@ -69,6 +69,7 @@ class femto:
             t.sleep(0.04)
             s.cli.cls()
         lg.info("user quit femto")
+
 f=None
 
 def test():
@@ -89,6 +90,7 @@ def test():
     f.start()
 
 def main():
+    global f
     try:
         test()
     except BaseException as e:
