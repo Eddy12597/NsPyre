@@ -81,10 +81,11 @@ class file:
             s.buffer = tis.recall_list(filename)
             lg.info("file " + filename + " found. Buffer length: " + str(len(s.buffer)))
             s.saved = True
-            return s.buffer
         except TypeError as te:
             lg.warn(repr(te)+" - file " + filename + " does not exist. emptying buffer...")
             s.buffer=[]
+            tis.store_list(filename, s.buffer)
+        return s.buffer
     def update_buffer(s):
         s._load_content_to_buffer(s.filename)
         s.saved=True
