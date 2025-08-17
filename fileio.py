@@ -31,7 +31,7 @@ class file:
             s.aved=False
         else:
             s.buffer = (s._load_content_to_buffer(s.filename))
-            lg.info("buffer length: " + str(len(buffer)))
+            lg.info("buffer length: " + str(len(s.buffer)))
         if not s._check_fn():
             s.filename = "".join([(ch if ch.isdigit() or ch.isalpha() else "") for ch in s.filename])
             try:
@@ -44,10 +44,10 @@ class file:
     def writeline(s, text: str):
         for ch in text:
             s.buffer.append(ord(ch))
-        s.buffer.append(0) # currently uses \0 (null terminator) as separation for new line. potentially refactor to \n becuase its more intuitive
+        s.buffer.append(10) # new line terminator
         s.saved = False
-    def _parse_nullt_list(s, list_ords: list[int]):
-        termidx=list_ords.index(0)
+    def _parse_nlt_list(s, list_ords: list[int]):
+        termidx=list_ords.index(10)
         if termidx != len(list_ords) - 1:
             lg.warn("chars found after null terminator in " + str(list_ords))
         result = ""
@@ -65,7 +65,7 @@ class file:
         lg.info("buffer length: " + str(len(s.buffer)))
         if s.buffer is None or len(s.buffer) == 0: return res
         for ord_ in s.buffer:
-            if ord_ == 0:
+            if ord_ == 10:
                 res.append("")
                 continue
             res[-1] += chr(ord_)
@@ -103,7 +103,7 @@ class file:
         for i in range(len(flist)):
             s.buffer.extend(s._linetoords(flist[i]))
             if i != len(flist) - 1:
-                s.buffer.append(0)
+                s.buffer.append(10)
         s.save()
 
     def insert(s, line: int, content: str):
