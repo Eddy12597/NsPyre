@@ -1,111 +1,100 @@
-# Logging utility library for Python on TI Nspire
-
 import ti_system as tis
 
-logmsglist = []
-logcallstack = []
+class Logger:
+    def __init__(self, filename=__file__):
+        self._filename = filename
+        self._start_time = tis.get_time_ms()
+        self._idx = 0
+        self._disabled = False
+        self._log_messages = []
+        self._call_stack = []
+        self._indent_level = 0
 
-indentlvl=0
-indstr=""
-_idx=0
-_start_time=tis.get_time_ms()
-_filename=__file__
+    def _basename(self):
+        """Return filename without path or extension."""
+        fname = self._filename.split("/")[-1]
+        return fname[:-3] if fname.endswith(".py") else fname
 
-def _lgfn(n):
-    global _filename
-    _filename = n
-
-def _lg(m):
-    global _idx
-    try:
-        logmsglist.append(str(_idx) + ": " + _filename.split("/")[_filename.count("/")][0:_filename.split("/")[_filename.count("/")].index(".py")] + ": " + str(tis.get_time_ms() - _start_time) + "ms: " + str(m))
-        _idx += 1
-    except:
-        _lg("an error occurred in logging")
-
-def _showlogs():
-    idx=0
-    while (idx < len(logmsglist)) and (input('-- More -- (q to quit)')) not in ["q", "Q", "exit", "esc"]:
-        for i in range(idx, min(idx+11, len(logmsglist))):
-            print(logmsglist[i])
-        idx += 10
-disabled = False
-class lg:
-    def disable():
-        global disabled
-        disabled=False
-    def enable():
-        global disabled
-        disabled=True
-    def set_fn(name):
-        _lgfn(name)
-    def raw(*args):
-        if disabled:
+    def _log(self, msg):
+        if self._disabled:
             return
+        entry = f"{self._idx}: {self._basename()}: {tis.get_time_ms() - self._start_time}ms: {msg}"
+        self._log_messages.append(entry)
+        self._idx += 1
+
+    def set_filename(self, name):
+        self._filename = name
+
+    def enable(self):
+        self._disabled = False
+
+    def disable(self):
+        self._disabled = True
+
+    # ===== Basic Logging =====
+    def raw(self, *args):
         for a in args:
-            _lg(a)
-    def call(fn_name: str, *args):
-        if disabled: return
-        global indstr, indentlvl
-        logcallstack.append(fn_name)
-        lg.cus("fn", indstr*indentlvl + "fn: "+fn_name+" ("+str(args)+")")
-        indentlvl += 1
-    def end(retval=None):
-        if disabled: return
-        global indstr, indentlvl
-        if len(logcallstack) > 0:
-            indentlvl -= 1
-            lg.cus("fn", indstr*indentlvl + "end fn: "+logcallstack.pop() + "->"+str(retval))
-        else:
-            lg.warn("log call stack already empty")
-    def stack():
-        for s in logcallstack:
-            print(str(s))
-    def clearstack():
-        logcallstack.clear()
-    def show():
-        # use 10 as font size
+            self._log(a)
+
+    def info(self, *args):
+        for a in args:
+            self._log(f"[info] {a}")
+
+    def warn(self, *args):
+        for a in args:
+            self._log(f"[warn] {a}")
+
+    def fatal(self, *args):
+        for a in args:
+            self._log(f"[fatal] {a}")
+
+    def custom(self, level, *args):
+        for a in args:
+            self._log(f"[{level}] {a}")
+
+    # ===== Call Stack =====
+    def call(self, fn_name, *args):
+        self._call_stack.append(fn_name)
+        indent = "  " * self._indent_level
+        self.custom("fn", f"{indent}fn: {fn_name} {args}")
+        self._indent_level += 1
+
+    def end(self, retval=None):
+        if not self._call_stack:
+            self.warn("call stack already empty")
+            return
+        self._indent_level -= 1
+        indent = "  " * self._indent_level
+        fn_name = self._call_stack.pop()
+        self.custom("fn", f"{indent}end fn: {fn_name} -> {retval}")
+
+    def stack(self):
+        for s in self._call_stack:
+            print(s)
+
+    def clear_stack(self):
+        self._call_stack.clear()
+
+    # ===== Viewing Logs =====
+    def show(self, page_size=10):
         print("=====+++++==           LOGS           ==+++++=====")
-        _showlogs()
+        idx = 0
+        while idx < len(self._log_messages):
+            for i in range(idx, min(idx+page_size, len(self._log_messages))):
+                print(self._log_messages[i])
+            idx += page_size
+            cont = input("-- More -- (q to quit) ")
+            if cont.lower() in ["q", "quit", "exit", "esc"]:
+                break
         print("=====+++++==    END OF LOGS    ==+++++=====")
-    def info(*args):
-        if disabled: return
-        for a in args:
-            _lg("[info] " + str(a))
-    def warn(*args):
-        if disabled: return
-        for a in args:
-            _lg("[warn] " + str(a))
-    def fatal(*args):
-        if disabled: return
-        for a in args:
-            _lg("[fatal] " + str(a))
-    def cus(level: str, *args):
-        if disabled: return
-        for a in args:
-            _lg("["+str(level)+"] "+str(a))
-    # Doesn't work for now, good first issue/PR
-    def level(lvl):
-        level=str(lvl)
-        lst=[]
-        for m in logmsglist:
-            tmp=""
-            left=False
-            rightidx=14
-            for i in range(9, len(m)):
-                if left:
-                    if m[i] == "]":
-                        rightidx = i + 1
-                        break
-                        tmp += m[i]
-                    if m[i] == "[":
-                        left=True
-            if tmp == lvl:
-                lst.append(m[rightidx+1:len(m)-1])
-        return lst
 
-# Ignore warnings if working in an IDE, this works, the lg class is static.
+    # ===== Filtering =====
+    def filter_level(self, level):
+        """Return logs matching a level like 'info', 'warn', 'fatal'."""
+        level_tag = f"[{level}]"
+        return [m for m in self._log_messages if level_tag in m]
+
+
+# ===== Usage =====
+lg = Logger()
 lg.info("logging set up")
-lg.enable()
-
-# tip: after the end of a buggy session, you can lg.show() in the shell, and press enter to incrementally show log messages.
