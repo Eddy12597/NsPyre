@@ -14,7 +14,7 @@ def clamp(_min, x, _max):
     return min(_max, max(_min, x))
 
 class cli:
-    def __init__(s, clisets: dict = None, guisets: dict = None): # includes cli and gui settings
+    def __init__(s, clisets: dict | None = None, guisets: dict | None = None): # includes cli and gui settings
 
         # Needs refactoring (using dict.get)
         # cli settings
@@ -65,7 +65,7 @@ class cli:
         d.set_color(s.background_color)
         d.fill_rect(0, 0, 318, 18)
         d.set_color(s.color)
-    def display(s, text: str = None):
+    def display(s, text: str | None = None):
         if text is not None:
             s.text_history.append(text)
         if len(s.text_history) > 18:
