@@ -1,4 +1,5 @@
 import ti_system as tis
+from format import *
 
 class Logger:
     def __init__(self, filename=__file__):
@@ -11,9 +12,10 @@ class Logger:
         self._indent_level = 0
 
     def _basename(self):
-        """Return filename without path or extension."""
-        fname = self._filename.split("/")[-1]
-        return fname[:-3] if fname.endswith(".py") else fname
+      """Return filename without path or extension."""
+      # Handle both forward and backward slashes (compatibility with testing on Windows)
+      fname = self._filename.replace("\\", "/").split("/")[-1]
+      return fname[:-3] if fname.endswith(".py") else fname
 
     def _log(self, msg):
         if self._disabled:
@@ -38,19 +40,19 @@ class Logger:
 
     def info(self, *args):
         for a in args:
-            self._log(f"[info] {a}")
+            self._log(f("[info] %v", a))
 
     def warn(self, *args):
         for a in args:
-            self._log(f"[warn] {a}")
+            self._log(f("[warn] %v", a))
 
     def fatal(self, *args):
         for a in args:
-            self._log(f"[fatal] {a}")
+            self._log(f("[fatal] %v", a))
 
     def custom(self, level, *args):
         for a in args:
-            self._log(f"[{level}] {a}")
+            self._log(f("[%v] %v", level, a))
 
     # ===== Call Stack =====
     def call(self, fn_name, *args):
