@@ -11,8 +11,8 @@ def substr(s: str, a: int = -1, b: int = 10000000) -> str:
     return res
 
 
-# can be used with print(f(...)), providing a modern pythonic printf option.
-def f(fmt, *args):
+# can be used with print(F(...)), providing a modern pythonic printf option.
+def F(fmt, *args):
     i = 0
     res=""
     args = list(args)
