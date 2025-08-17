@@ -2,6 +2,10 @@
 import unittest
 import ti_draw as td
 
+import pygame
+pygame.display.set_mode((318, 212))  # Ensure screen exists for tests
+
+
 class TestTIDraw(unittest.TestCase):
 
     def setUp(self):
