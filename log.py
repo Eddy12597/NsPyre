@@ -24,7 +24,7 @@ class Logger:
         self._log_messages.append(entry)
         self._idx += 1
 
-    def set_filename(self, name):
+    def set_fn(self, name): # for compatibility
         self._filename = name
 
     def enable(self):
@@ -40,19 +40,19 @@ class Logger:
 
     def info(self, *args):
         for a in args:
-            self._log(f("[info] %v", a))
+            self._log(F("[info] %v", a))
 
     def warn(self, *args):
         for a in args:
-            self._log(f("[warn] %v", a))
+            self._log(F("[warn] %v", a))
 
     def fatal(self, *args):
         for a in args:
-            self._log(f("[fatal] %v", a))
+            self._log(F("[fatal] %v", a))
 
     def custom(self, level, *args):
         for a in args:
-            self._log(f("[%v] %v", level, a))
+            self._log(F("[%v] %v", level, a))
 
     # ===== Call Stack =====
     def call(self, fn_name, *args):
@@ -91,7 +91,7 @@ class Logger:
         print("=====+++++==    END OF LOGS    ==+++++=====")
 
     # ===== Filtering =====
-    def filter_level(self, level):
+    def filter(self, level):
         """Return logs matching a level like 'info', 'warn', 'fatal'."""
         level_tag = f"[{level}]"
         return [m for m in self._log_messages if level_tag in m]
