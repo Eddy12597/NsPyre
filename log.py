@@ -50,7 +50,7 @@ class Logger:
         for a in args:
             self._log(F("[fatal] %v", a))
 
-    def custom(self, level, *args):
+    def cus(self, level, *args):
         for a in args:
             self._log(F("[%v] %v", level, a))
 
@@ -58,7 +58,7 @@ class Logger:
     def call(self, fn_name, *args):
         self._call_stack.append(fn_name)
         indent = "  " * self._indent_level
-        self.custom("fn", f"{indent}fn: {fn_name} {args}")
+        self.cus("fn", f"{indent}fn: {fn_name} {args}")
         self._indent_level += 1
 
     def end(self, retval=None):
@@ -68,7 +68,7 @@ class Logger:
         self._indent_level -= 1
         indent = "  " * self._indent_level
         fn_name = self._call_stack.pop()
-        self.custom("fn", f"{indent}end fn: {fn_name} -> {retval}")
+        self.cus("fn", F("%vend fn: %v -> %v", indent, fn_name, retval))
 
     def stack(self):
         for s in self._call_stack:

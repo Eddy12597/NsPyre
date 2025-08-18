@@ -63,12 +63,12 @@ class cli:
         s.cwd = newCwd
     def clearscreen(s):
         d.set_color(s.background_color)
-        d.fill_rect(0, 0, 318, 18)
+        d.fill_rect(0, 0, 318, 18) # can't change font size on calculator, so 18 lines would fit when the font size is 10 units (in python editor, menu->1->6)
         d.set_color(s.color)
     def display(s, text: str | None = None):
         if text is not None:
             s.text_history.append(text)
-        if len(s.text_history) > 18:
+        if len(s.text_history) > 18: # only draw latest 18 (with relation to s.scrollup)
             s.clearscreen()
             for i in range(1, 19):
                 d.draw_text(0, 18-i, str(s.text_history[-(18-i) - 1 - s.scrollup]))
@@ -86,7 +86,8 @@ class cli:
     """
     def blinkCursor(s, numsPerSec: int = 1.5, minlen=0):
         # blinks the cursor at a given frequency.
-        # returns any key that is pressed (apart from del and the arrow keys)
+        # returns any key that is pressed (apart from del and the arrow keys) -> used
+        # in other functions like getInput
         # will be integrated into the getInput function
     """
 
@@ -103,16 +104,20 @@ class cli:
             if k != "":
                 if not (k.startswith("del")) and not (k in s.arrow_list.values()):
                     s.setLastLine(
-                        # my implementation of substr in format.py, similar to the one in java
+                        # from format.py, cleaner syntax than [::]
+                        # signature: (string: str, start: int, end: int)
+                        # start is inclusive, end is exclusive
                         substr(
-                            s.text_history[-1], 0, len(s.text_history[-1]) - s.cursorleft - 0 # kept here, try toggling if buggy
-                            ) + k + substr(
-                                s.text_history[-1],
-                                len(s.text_history[-1]) - s.cursorleft, len(s.text_history[-1])           
-                            )
+                            s.text_history[-1], 
+                            0, 
+                            len(s.text_history[-1]) - s.cursorleft - 0 # kept here, try toggling if buggy
+                        ) + k + substr(
+                            s.text_history[-1],
+                            len(s.text_history[-1]) - s.cursorleft,
+                            len(s.text_history[-1])           
+                        )
                     )
                 elif k.startswith("del"):
-                    # no idea how it actually worked
                     if len(s.text_history[-1]) > len(prompt):
                         s.text_history[-1] = substr(
                             s.text_history[-1],
@@ -137,6 +142,10 @@ class cli:
 
                 # end of checking key type (normal, del, arrow)
                 s.display()
+                # try patch: clear screen?
+                # t.sleep(0.01)
+                # s.clearscreen()
+                # Doesn't work
             # end of checking whether key pressed is empty or not
             result = s.text_history[-1][len(prompt):len(s.text_history[-1])]
             t.sleep(0.01)
