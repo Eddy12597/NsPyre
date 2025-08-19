@@ -24,6 +24,12 @@ For detailed listing of good first issues/PRs, see the Status section.
 
 `ti_system.py`: ti nspire calculator and system api for system info / time, as well as storing and retrieving variables and lists to and from the ti nspire calculator page.
 
+### Utils
+
+`log.py`: simple logging library, capable of different levels, incremental results, and log level filtering
+
+`format.py`: string format libraray, provides a `substr` method (equivalent to `String.substring` in Java) and `F` method for f-string emulation in micropython 3.4.0
+
 ### Python-based virtual OS
 
 `filesys.py`: stores the tree-node like structure for a file system. serves as 'backend' for the OS
