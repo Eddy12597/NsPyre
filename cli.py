@@ -61,27 +61,25 @@ class cli:
     
     def setCwd(s, newCwd: fs.folder): # the `cd` command
         s.cwd = newCwd
-    def clearscreen(s):
+    def clearscreen(s): # fills entire screen with background color
         d.set_color(s.background_color)
         d.fill_rect(0, 0, 318, 18) # can't change font size on calculator, so 18 lines would fit when the font size is 10 units (in python editor, menu->1->6)
         d.set_color(s.color)
     def display(s, text: str | None = None):
         if text is not None:
             s.text_history.append(text)
+        s.clearscreen()
+        d.use_buffer()
         if len(s.text_history) > 18: # only draw latest 18 (with relation to s.scrollup)
-            s.clearscreen()
             for i in range(1, 19):
                 d.draw_text(0, 18-i, str(s.text_history[-(18-i) - 1 - s.scrollup]))
                 # overflow-x
                 if len(s.text_history[-1]) > 50:
                     s.display(s.text_history[-1][51:])
-            d.paint_buffer()
         else:
-            s.clearscreen()
-            d.use_buffer()
             for i in range(1, len(s.text_history) + 1):
                 d.draw_text(0, 18-i, s.text_history[i-1])
-            d.paint_buffer()
+        d.paint_buffer()
     # future:
     """
     def blinkCursor(s, numsPerSec: int = 1.5, minlen=0):
