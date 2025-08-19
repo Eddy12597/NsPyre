@@ -272,7 +272,7 @@ def main():
                     fn = stdin[stdin.index("femto ") + len("femto "):]
                 except:
                     fn=None
-                c.ommands["femto"][0](c, fn) # type: ignore
+                c.commands["femto"][0](c, fn) # type: ignore
             elif stdin.startswith("cat"):
                 fn = stdin[len("cat "):]
                 lg.info("catting " + fn)
