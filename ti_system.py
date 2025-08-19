@@ -198,8 +198,9 @@ def _get_key_from_pygame(blocking=False) -> str:
 def get_key() -> str:
     try:
         k = _get_key_from_pygame()
-        if k == "":  # pygame active but no window/no focus/no events
-            return _get_key_from_stdin()
+        # if k == "":  # pygame active but no window/no focus/no events
+        #     return _get_key_from_stdin()
+        # return k
         return k
     except pygame.error as e:
         if "video system not initialized" in str(e).lower():
